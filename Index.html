@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <base target="_top">
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <div id="overlay" class="overlay hidden" role="status" aria-live="polite">
+    <div class="loader-mark"><span></span><span></span><span></span></div>
+    <strong id="loadingText">Sedang diproses…</strong>
+    <progress id="progress" max="100" value="0"></progress>
+  </div>
+
+  <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Navigasi utama">
+    <div class="brand">
+      <div id="brandLogo" class="logo" aria-label="Lencana SK Lormalong">SKL</div>
+      <div class="brand-copy">
+        <span>Portal Rasmi</span>
+        <b>ONE PAGE REPORT</b>
+        <small>SK Lormalong</small>
+      </div>
+    </div>
+    <div class="nav-label">Menu Utama</div>
+    <nav>
+      <button class="nav active" data-page="formPage" type="button">
+        <span class="nav-icon">✦</span><span>One Page Report</span>
+      </button>
+      <button class="nav" data-page="historyPage" type="button">
+        <span class="nav-icon">◷</span><span>Sejarah Pengisian</span>
+      </button>
+    </nav>
+    <div class="sidebar-motto">
+      <span class="motto-line"></span>
+      <small>SKL TEGUH GEMILANG</small>
+      <p>Integriti Dihayati<br>Kegemilangan Dicapai</p>
+    </div>
+  </aside>
+
+  <main>
+    <header id="appHeader" class="app-header">
+      <button id="menuBtn" class="icon-btn" type="button" aria-label="Buka menu" aria-expanded="false">☰</button>
+      <div class="header-copy">
+        <span class="eyebrow">Sistem Dokumentasi Sekolah</span>
+        <h1>ONE PAGE REPORT</h1>
+        <p id="schoolName">SEKOLAH KEBANGSAAN LORMALONG</p>
+      </div>
+      <div class="header-badge"><span></span> Sistem Aktif</div>
+    </header>
+
+    <section id="formPage" class="page active">
+      <div class="page-hero">
+        <div>
+          <span class="eyebrow">Dokumentasi Program</span>
+          <h2>Cipta laporan yang kemas dan profesional.</h2>
+          <p>Lengkapkan maklumat program, dokumentasi dan pengesahan dalam satu aliran mudah.</p>
+        </div>
+        <div class="hero-emblem">OPR<span>SKL</span></div>
+      </div>
+
+      <form id="reportForm" novalidate>
+        <input type="hidden" id="reportId">
+
+        <div class="section">
+          <div class="section-heading"><span class="step">01</span><div><span>Asas laporan</span><h2>Maklumat Program</h2></div></div>
+          <div class="grid">
+            <label>Unit *<select id="unit" required><option value="">Pilih unit</option></select><small id="templateLoading" class="hidden">Memuatkan templat…</small></label>
+            <label>Tahun *<select id="year" required><option value="">Pilih tahun</option></select></label>
+            <label>Nama Laporan *<input id="name" required autocomplete="off" placeholder="Contoh: Program Minggu Bahasa"></label>
+            <label>Tarikh *<input id="date" type="date" required></label>
+            <label>Hari<input id="day" readonly placeholder="Dijana automatik"></label>
+            <label>Tempat *<input id="place" required placeholder="Lokasi program"></label>
+            <label>Peringkat *<select id="level" required></select></label>
+            <label>Anjuran *<select id="organiser" required></select></label>
+            <label id="otherOrganiserWrap" class="hidden">Sila Nyatakan Anjuran *<input id="otherOrganiser"></label>
+            <label class="wide">Sasaran Peserta *<textarea id="target" required placeholder="Nyatakan kumpulan sasaran program"></textarea></label>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-heading"><span class="step">02</span><div><span>Hasil program</span><h2>Objektif dan Impak</h2></div></div>
+          <div class="grid">
+            <label>Objektif 1 *<textarea id="objective1" required></textarea></label>
+            <label>Objektif 2 *<textarea id="objective2" required></textarea></label>
+            <label class="wide">Impak *<textarea id="impact" required></textarea></label>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-heading"><span class="step">03</span><div><span>Maklumat tambahan</span><h2>Pencapaian dan Jemputan</h2></div></div>
+          <div class="choice-panel">
+            <div class="choice"><b>Pencapaian</b><label><input type="radio" name="achievementChoice" value="no" checked> Tiada Pencapaian</label><label><input type="radio" name="achievementChoice" value="yes"> Ada Pencapaian</label></div>
+            <label id="achievementWrap" class="hidden">Pencapaian *<textarea id="achievement"></textarea></label>
+          </div>
+          <div class="choice-panel">
+            <div class="choice"><b>Jemputan Luar</b><label><input type="radio" name="guestChoice" value="no" checked> Tiada Jemputan</label><label><input type="radio" name="guestChoice" value="yes"> Ada Jemputan</label></div>
+            <div id="guestWrap" class="hidden"><div id="guests"></div><button type="button" class="add" id="addGuest">＋ Tambah Jemputan Luar</button></div>
+          </div>
+          <label>Penambahbaikan *<textarea id="improvement" required></textarea></label>
+        </div>
+
+        <div class="section">
+          <div class="section-heading"><span class="step">04</span><div><span>Pasukan pelaksana</span><h2>Penglibatan Guru</h2></div></div>
+          <div id="teachers"></div>
+          <button type="button" class="add" id="addTeacher">＋ Tambah Guru</button>
+        </div>
+
+        <div class="section">
+          <div class="section-heading"><span class="step">05</span><div><span>Bukti aktiviti</span><h2>Dokumentasi Gambar</h2></div></div>
+          <div class="upload-note"><span>◇</span><p><b>Format JPG, PNG atau WEBP</b><br>Maksimum 8 MB setiap fail. Gambar dimampatkan sebelum dihantar.</p></div>
+          <div id="images" class="image-inputs"></div>
+          <button type="button" class="add" id="addImage">＋ Tambah Gambar</button>
+        </div>
+
+        <div class="section">
+          <div class="section-heading"><span class="step">06</span><div><span>Pengesahan akhir</span><h2>Pengesahan Laporan</h2></div></div>
+          <label>Laporan Disediakan Oleh *<select id="preparedBy" required></select></label>
+        </div>
+
+        <div class="actions" aria-label="Tindakan laporan">
+          <button type="button" class="secondary" id="previewBtn">Pratonton</button>
+          <button type="button" class="primary" id="saveBtn">Simpan Laporan</button>
+          <button type="button" class="accent" id="pdfBtn">Jana PDF</button>
+          <button type="button" class="danger-outline" id="resetBtn">Kosongkan</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="historyPage" class="page">
+      <div class="page-hero compact"><div><span class="eyebrow">Arkib Digital</span><h2>Sejarah Pengisian</h2><p>Cari, semak dan urus semua laporan yang pernah disimpan.</p></div><button class="primary" id="newBtn" type="button">＋ Laporan Baharu</button></div>
+      <div class="section history-shell">
+        <div class="filters"><input id="search" placeholder="Cari ID, nama laporan atau guru…"><select id="filterUnit"><option value="">Semua Unit</option></select><input id="filterDate" type="date"><button id="filterBtn" type="button">Cari</button></div>
+        <div id="historyList"></div>
+        <div id="pagination" class="pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="previewModal">
+    <div class="modal-head"><div><span class="eyebrow">Semakan Akhir</span><h2>Pratonton Laporan</h2></div><button id="closePreview" type="button" aria-label="Tutup">×</button></div>
+    <iframe id="previewFrame" title="Pratonton One Page Report"></iframe>
+    <div class="modal-actions"><button id="backEdit" type="button">Kembali Edit</button><button id="previewSave" type="button">Simpan</button><button class="accent" id="previewPdf" type="button">Simpan dan Jana PDF</button><button id="printPreview" type="button">Cetak</button></div>
+  </dialog>
+  <?!= include('JavaScript'); ?>
+</body>
+</html>
