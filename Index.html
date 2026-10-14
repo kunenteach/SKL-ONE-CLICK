@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <div id="login" class="login-shell">
+    <div class="orb orb-one"></div><div class="orb orb-two"></div>
+    <section class="login-story"><div class="brand-mark school-crest"><img src="<?= getPublicConfig_().schoolBadgeUrl ?>" alt="Lencana <?= APP_CONFIG.schoolName ?>" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>SK</span></div><p class="eyebrow">PLATFORM JAMINAN KUALITI</p><h1>STANDARD KUALITI<br><span>@ SEKOLAH</span></h1><p class="login-school-name"><?= APP_CONFIG.schoolName ?></p><p>Satu ruang kerja bersepadu untuk evidens yang tersusun, telus dan mudah dipantau.</p><div class="trust"><span>01</span> Selamat & tersusun <span>02</span> Analitik masa nyata</div></section>
+    <form id="loginForm" class="login-card"><p class="eyebrow">SELAMAT DATANG</p><h2>Log masuk ke sistem</h2><p>Masukkan kata laluan sistem untuk meneruskan.</p><label>Kata laluan<div class="password-field"><input id="loginPassword" required type="password" autocomplete="current-password" minlength="4" maxlength="4" inputmode="text" placeholder="Masukkan kata laluan" autofocus><button id="togglePassword" type="button" aria-label="Lihat kata laluan" aria-pressed="false">LIHAT</button></div></label><p id="loginError" class="login-error" role="alert" aria-live="polite"></p><button id="loginButton" class="btn primary" type="submit">LOG MASUK <span>→</span></button><small>Password sahaja · Tiada ID pengguna diperlukan</small></form>
+  </div>
+  <div id="app" class="app hidden">
+    <aside id="sidebar" class="sidebar"><div class="side-brand"><div class="brand-mark school-crest"><img src="<?= getPublicConfig_().schoolBadgeUrl ?>" alt="Lencana sekolah" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>SK</span></div><div><b class="school-brand-name"><?= APP_CONFIG.schoolName ?></b><small>STANDARD KUALITI @ SEKOLAH</small></div><button id="collapseBtn" aria-label="Kecilkan navigasi">‹</button></div><nav id="nav"></nav><div class="side-foot"><button data-page="settings" title="Tetapan">⚙<span>Tetapan Sistem</span></button><small>Versi 1.0 · 2026</small></div></aside>
+    <div class="workspace"><header><button id="menuBtn" class="icon-btn" aria-label="Buka menu">☰</button><div><p class="eyebrow">STANDARD KUALITI @ SEKOLAH</p><strong><?= APP_CONFIG.schoolName ?></strong></div><div class="header-actions"><button class="icon-btn" aria-label="Carian">⌕</button><button id="notifyBtn" class="icon-btn dot" aria-label="Notifikasi">♢</button><div class="user"><span class="avatar">PS</span><div><b id="userName">Pentadbir Sekolah</b><small>ADMIN</small></div></div><button id="logoutBtn" class="icon-btn" title="Log keluar">↗</button></div></header><main id="content"></main><footer><?= APP_CONFIG.schoolName ?> · STANDARD KUALITI @ SEKOLAH · © 2026</footer></div>
+    <div id="overlay" class="overlay"></div><aside id="drawer" class="drawer" aria-hidden="true"></aside><div id="toast" class="toast"></div>
+  </div>
+  <?!= include('Scripts'); ?>
+  <?!= include('PpsScripts'); ?>
+  <?!= include('EvidenceScripts'); ?>
+</body>
+</html>
