@@ -1,0 +1,33 @@
+<script>
+/** Pengawal frontend untuk Link Pengisian. */
+async function loadEntryLinks() {
+  if (!state.initial) return;
+  state.entryLinks = await server('getEntryLinks', {});
+  $('entryLinkRows').innerHTML = state.entryLinks.length ? state.entryLinks.map(link =>
+    `<tr><td>${link.year}</td><td>${esc(link.subject)}</td><td><a class="btn secondary" href="${esc(link.url)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Pautan</a></td></tr>`
+  ).join('') : '<tr><td colspan="3" class="empty-state">Belum ada link pengisian disimpan.</td></tr>';
+}
+
+function openEntryLinkEditor() {
+  $('entryLinkForm').reset();
+  $('entryLinkYear').value = $('globalYear').value;
+  $('entryLinkEditor').classList.remove('hidden');
+  $('entryLinkEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeEntryLinkEditor() {
+  $('entryLinkForm').reset();
+  $('entryLinkEditor').classList.add('hidden');
+}
+
+async function saveEntryLink(event) {
+  event.preventDefault();
+  await server('saveEntryLink', {
+    year: $('entryLinkYear').value,
+    subject: $('entryLinkSubject').value,
+    url: $('entryLinkUrl').value
+  });
+  closeEntryLinkEditor();
+  await loadEntryLinks();
+}
+</script>

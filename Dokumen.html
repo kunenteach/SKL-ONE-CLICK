@@ -1,0 +1,47 @@
+<!-- Modul Fail Digital SK@S: senarai dahulu, borang dibuka apabila diperlukan. -->
+<section id="page-documents" class="page">
+  <div class="page-head">
+    <div><p class="eyebrow">Google Drive</p><h1>Fail Digital SK@S</h1></div>
+    <button id="refreshDocs" class="btn secondary" type="button"><i class="fa-solid fa-rotate"></i> Segarkan</button>
+  </div>
+
+  <article class="card">
+    <div class="section-heading">
+      <div><h2>Senarai Fail Digital</h2><p class="helper-copy">Fail disusun daripada tahun terkini hingga tahun terdahulu.</p></div>
+    </div>
+    <div class="document-filters" aria-label="Penapis Fail Digital">
+      <label>Tahun<select id="docFilterYear"><option value="">Semua Tahun</option></select></label>
+      <label>Kategori<select id="docFilterCategory"><option value="">Semua Kategori</option></select></label>
+      <button id="applyDocumentFilters" class="btn secondary" type="button"><i class="fa-solid fa-filter"></i> Tapis</button>
+      <button id="resetDocumentFilters" class="btn secondary" type="button">Reset</button>
+    </div>
+    <div class="table-wrap">
+      <table class="digital-file-table">
+        <thead><tr><th>Tahun</th><th>Kategori</th><th>Nama Dokumen</th><th>Tindakan</th></tr></thead>
+        <tbody id="docRows"></tbody>
+      </table>
+    </div>
+  </article>
+
+  <div class="document-add-row">
+    <button id="openDocumentEditor" class="btn" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Tambah Dokumen</button>
+  </div>
+
+  <article id="documentEditor" class="card document-editor hidden">
+    <div class="section-heading">
+      <div><p class="eyebrow">Fail Digital SK@S</p><h2 id="documentEditorTitle">Muat Naik Dokumen</h2></div>
+      <button id="closeDocumentEditor" class="btn secondary" type="button"><i class="fa-solid fa-xmark"></i> Tutup</button>
+    </div>
+    <form id="documentForm" class="form-grid">
+      <input id="docId" type="hidden">
+      <label>Tahun *<select id="docYear" required></select></label>
+      <label>Kategori *<select id="docCategory" required></select></label>
+      <label class="full">Nama Dokumen *<input id="docName" required></label>
+      <label id="docFileField" class="full">Pilih Fail *<input id="docFile" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"><small id="fileLimit"></small></label>
+      <div class="form-actions full">
+        <button id="saveDocumentButton" class="btn" type="submit"><i class="fa-solid fa-cloud-arrow-up"></i> Muat Naik</button>
+        <button id="cancelDocumentEditor" class="btn secondary" type="button">Batal</button>
+      </div>
+    </form>
+  </article>
+</section>

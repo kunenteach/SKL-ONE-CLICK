@@ -1,0 +1,43 @@
+<!-- Skrin masuk menggunakan identiti Google bagi deployment Apps Script. -->
+<style>
+  .login-emblem-wrap{width:88px;height:88px;display:grid;place-items:center;margin-bottom:28px;border-radius:20px;background:#fff;padding:8px;box-shadow:0 16px 38px rgba(0,0,0,.22)}
+  .login-emblem{display:block;width:100%;height:100%;object-fit:contain;border-radius:13px}
+  .login-emblem-wrap .login-mark{width:100%;height:100%;margin:0;box-shadow:none}
+  @media(max-width:780px){.login-emblem-wrap{width:66px;height:66px;margin-bottom:18px;border-radius:16px}}
+</style>
+<section id="loginPage" class="login-page">
+  <div class="login-shell">
+    <div class="login-brand-panel">
+      <div class="login-emblem-wrap">
+        <img id="loginSchoolLogo" data-drive-file-id="1byIjETieWJNW1XYMzIYmoDZLh_4MNubc" class="login-emblem" src="https://lh3.googleusercontent.com/d/1byIjETieWJNW1XYMzIYmoDZLh_4MNubc=w400" data-template-src="<?= schoolLogoUrl ?>" alt="Lencana Sekolah Kebangsaan Lormalong">
+        <div id="loginLogoFallback" class="login-mark hidden" aria-hidden="true"><i class="fa-solid fa-school"></i></div>
+      </div>
+      <p class="eyebrow">Portal Pengurusan Sekolah</p>
+      <h1>DASHBOARD STANDARD<br>KUALITI @ SEKOLAH</h1>
+      <p>Pengurusan skor, analisis pencapaian, pelan tindakan dan dokumen sokongan dalam satu sistem.</p>
+      <div class="login-school"><i class="fa-solid fa-building-columns"></i><span>SEKOLAH KEBANGSAAN LORMALONG</span></div>
+    </div>
+    <div class="login-form-panel">
+      <div class="login-form-inner">
+        <div class="login-lock"><i class="fa-solid fa-shield-halved"></i></div>
+        <p class="eyebrow">Akses Selamat</p>
+        <h2>Log Masuk</h2>
+        <p class="login-copy">Masukkan kata laluan mengikut peranan, atau teruskan dengan akaun Google.</p>
+        <form id="passwordLoginForm" class="password-login-form">
+          <label>Kata Laluan<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan kata laluan" required autofocus></label>
+          <button class="btn login-button" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Log Masuk</button>
+        </form>
+        <div class="login-divider"><span>atau</span></div>
+        <button id="loginButton" class="btn login-button secondary-login" type="button"><i class="fa-brands fa-google"></i> Log Masuk dengan Akaun Google</button>
+        <div id="loginError" class="login-error hidden" role="alert"></div>
+        <div class="login-help"><i class="fa-solid fa-circle-info"></i><span>ADMIN menggunakan A001. GURU menggunakan A002. ID pengguna tidak diperlukan.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.getElementById('loginSchoolLogo').addEventListener('error', function () {
+    this.classList.add('hidden');
+    document.getElementById('loginLogoFallback').classList.remove('hidden');
+  });
+</script>

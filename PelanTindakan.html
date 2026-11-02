@@ -1,0 +1,48 @@
+<!-- Modul pelan tindakan: jadual dipaparkan dahulu, borang dibuka apabila diperlukan. -->
+<section id="page-action" class="page">
+  <div class="page-head">
+    <div><p class="eyebrow">Intervensi berfokus</p><h1>Pelan Tindakan</h1></div>
+    <div class="form-actions">
+      <button id="openActionEditor" class="btn admin-only" type="button"><i class="fa-solid fa-plus"></i> Tambah Pelan Tindakan</button>
+      <button class="btn secondary" type="button" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak</button>
+    </div>
+  </div>
+
+  <article class="card">
+    <div class="section-heading">
+      <div><h2>Jadual Pelan Tindakan</h2><p class="helper-copy">Semua pelan dipaparkan mengikut tahun. Tekan Edit untuk mengemas kini rekod.</p></div>
+    </div>
+    <div class="table-wrap">
+      <table class="action-plan-table">
+        <thead><tr><th>Tahun</th><th>Fokus Utama</th><th>Data TOV</th><th>Objektif</th><th>Pelan Intervensi</th><th>Tempoh</th><th>Tanggungjawab</th><th>Catatan</th><th class="admin-only">Tindakan</th></tr></thead>
+        <tbody id="actionRows"></tbody>
+      </table>
+    </div>
+  </article>
+
+  <article id="actionEditor" class="card action-editor hidden admin-only">
+    <div class="section-heading">
+      <div><p class="eyebrow">Rekod intervensi</p><h2 id="actionEditorTitle">Pelan Tindakan Baharu</h2></div>
+      <button id="closeActionEditor" class="btn secondary" type="button"><i class="fa-solid fa-xmark"></i> Tutup</button>
+    </div>
+    <form id="actionForm" class="form-grid">
+      <input id="actionId" type="hidden">
+      <label>Tahun *<select id="actYear" required></select></label>
+      <label>Standard *<select id="actStandard" required></select></label>
+      <label>Had Skor<input id="actLimit" type="number" min="0" max="100"></label>
+      <div class="field-button"><button id="findItems" type="button" class="btn">Cari Item Lemah</button></div>
+      <label class="full">Item Rujukan<select id="actItem"><option value="">Pilih item jika berkaitan</option></select></label>
+      <label class="full">1. Fokus Utama *<textarea id="actFocus" required placeholder="Contoh: Standard 5 (Kemenjadian Murid) — Kurikulum"></textarea></label>
+      <label class="full">2. Data TOV *<textarea id="actTov" required placeholder="Contoh: Skor 59.87%; Jurang skor 40.13%"></textarea></label>
+      <label class="full">3. Objektif *<textarea id="actObjective" required placeholder="Nyatakan objektif yang hendak dicapai"></textarea></label>
+      <label class="full">4. Pelan Intervensi *<textarea id="actIntervention" required placeholder="Senaraikan tindakan atau program intervensi"></textarea></label>
+      <label class="full">5. Tempoh *<textarea id="actPeriod" required placeholder="Contoh: 2 kali setahun / Mac hingga November"></textarea></label>
+      <label class="full">6. Tanggungjawab *<textarea id="actResponsibility" required placeholder="Senaraikan pegawai atau jawatankuasa bertanggungjawab"></textarea></label>
+      <label>7. Catatan *<select id="actStatus" required></select></label>
+      <div class="form-actions full">
+        <button class="btn" type="submit">Simpan Pelan Tindakan</button>
+        <button id="cancelActionEditor" class="btn secondary" type="button">Batal</button>
+      </div>
+    </form>
+  </article>
+</section>

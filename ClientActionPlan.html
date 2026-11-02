@@ -1,0 +1,112 @@
+<script>
+/** Carian item lemah dan pengurusan jadual pelan tindakan. */
+async function findLowItems() {
+  state.lowItems = await server('getLowScoreItems', {
+    year: $('actYear').value,
+    standard: $('actStandard').value,
+    limit: $('actLimit').value
+  });
+  fillSelect('actItem', state.lowItems.map(function (item) {
+    return { value: item.id, label: item.code + ' — ' + item.name + ' (' + item.score + ')' };
+  }), 'Pilih item jika berkaitan');
+  if (state.lowItems.length) {
+    $('actItem').value = state.lowItems[0].id;
+    selectLowItem();
+  }
+}
+
+function selectLowItem() {
+  var item = state.lowItems.find(function (entry) { return entry.id === $('actItem').value; });
+  if (!item) return;
+  $('actStandard').value = item.standard;
+  $('actFocus').value = item.standard + ' — ' + item.standardName + '\n' + item.code + ' — ' + item.name;
+  var score = Number(item.score);
+  $('actTov').value = 'Skor TOV: ' + score.toFixed(2) + '%\nJurang skor: ' + Math.max(0, 100 - score).toFixed(2) + '%';
+}
+
+async function saveAction(event) {
+  event.preventDefault();
+  var item = state.lowItems.find(function (entry) { return entry.id === $('actItem').value; });
+  var standard = state.initial.standards.find(function (entry) { return entry.code === $('actStandard').value; });
+  await server('saveActionPlan', {
+    id: $('actionId').value,
+    year: $('actYear').value,
+    standard: $('actStandard').value,
+    standardName: standard ? standard.name : '',
+    itemCode: item ? item.code : '',
+    itemName: item ? item.name : '',
+    score: item ? item.score : '',
+    limit: $('actLimit').value,
+    focus: $('actFocus').value,
+    dataTov: $('actTov').value,
+    objective: $('actObjective').value,
+    intervention: $('actIntervention').value,
+    period: $('actPeriod').value,
+    responsibility: $('actResponsibility').value,
+    implementation: $('actStatus').value
+  });
+  resetActionForm();
+  closeActionEditor();
+  await loadActions();
+}
+
+function resetActionForm() {
+  $('actionForm').reset();
+  $('actionId').value = '';
+  $('actLimit').value = state.initial.defaultTarget;
+  $('actYear').value = $('globalYear').value;
+}
+
+async function loadActions() {
+  if (!state.initial) return;
+  state.actions = await server('getActionPlans', {});
+  $('actionRows').innerHTML = state.actions.map(function (plan) {
+    var controls = '';
+    if (state.initial.user.role === 'ADMIN') controls = '<button class="btn secondary" type="button" onclick="editAction(\'' + esc(plan.id) + '\')">Edit</button> <button class="btn danger" type="button" onclick="removeAction(\'' + esc(plan.id) + '\')">Padam</button>';
+    return '<tr><td>' + esc(plan.year) + '</td><td>' + multiline_(plan.focus) + '</td><td>' + multiline_(plan.dataTov) +
+      '</td><td>' + multiline_(plan.objective) + '</td><td>' + multiline_(plan.intervention) +
+      '</td><td>' + multiline_(plan.period) + '</td><td>' + multiline_(plan.responsibility) +
+      '</td><td>' + badge(plan.implementation) + '</td>' + (state.initial.user.role === 'ADMIN' ? '<td class="table-actions">' + controls + '</td>' : '') + '</tr>';
+  }).join('');
+}
+
+function multiline_(value) { return esc(value || '').replace(/\n/g, '<br>'); }
+
+function editAction(id) {
+  var plan = state.actions.find(function (entry) { return entry.id === id; });
+  if (!plan) return;
+  $('actionId').value = plan.id;
+  $('actYear').value = String(plan.year);
+  $('actStandard').value = plan.standard;
+  $('actLimit').value = plan.limit == null ? state.initial.defaultTarget : plan.limit;
+  $('actFocus').value = plan.focus;
+  $('actTov').value = plan.dataTov;
+  $('actObjective').value = plan.objective;
+  $('actIntervention').value = plan.intervention;
+  $('actPeriod').value = plan.period;
+  $('actResponsibility').value = plan.responsibility;
+  $('actStatus').value = plan.implementation;
+  openActionEditor(true);
+}
+
+/** Buka editor di bawah jadual untuk rekod baharu atau kemas kini. */
+function openActionEditor(editing) {
+  if (!state.initial || state.initial.user.role !== 'ADMIN') return;
+  if (!editing) resetActionForm();
+  $('actionEditorTitle').textContent = editing ? 'Kemas Kini Pelan Tindakan' : 'Pelan Tindakan Baharu';
+  $('actionEditor').classList.remove('hidden');
+  $('actionEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeActionEditor() {
+  resetActionForm();
+  $('actionEditor').classList.add('hidden');
+}
+
+async function removeAction(id) {
+  if (confirm('Padam pelan tindakan ini?')) {
+    await server('deleteActionPlan', id);
+    await loadActions();
+  }
+}
+</script>
