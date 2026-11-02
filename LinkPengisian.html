@@ -1,0 +1,36 @@
+<!-- Modul Link Pengisian: jadual dahulu, borang tambah di bahagian bawah. -->
+<section id="page-entry-links" class="page">
+  <div class="page-head">
+    <div><p class="eyebrow">Pautan dalam talian</p><h1>Link Pengisian</h1></div>
+    <button id="refreshEntryLinks" class="btn secondary" type="button"><i class="fa-solid fa-rotate"></i> Segarkan</button>
+  </div>
+  <article class="card">
+    <div class="section-heading">
+      <div><h2>Senarai Link Pengisian</h2><p class="helper-copy">Pautan disusun daripada tahun terkini hingga tahun terdahulu.</p></div>
+    </div>
+    <div class="table-wrap">
+      <table class="entry-link-table">
+        <thead><tr><th>Tahun</th><th>Perkara</th><th>Link/Pautan</th></tr></thead>
+        <tbody id="entryLinkRows"></tbody>
+      </table>
+    </div>
+  </article>
+  <div class="entry-link-add-row">
+    <button id="openEntryLinkEditor" class="btn" type="button"><i class="fa-solid fa-plus"></i> Tambah Link Pengisian</button>
+  </div>
+  <article id="entryLinkEditor" class="card entry-link-editor hidden">
+    <div class="section-heading">
+      <div><p class="eyebrow">Pautan baharu</p><h2>Tambah Link Pengisian</h2></div>
+      <button id="closeEntryLinkEditor" class="btn secondary" type="button"><i class="fa-solid fa-xmark"></i> Tutup</button>
+    </div>
+    <form id="entryLinkForm" class="form-grid">
+      <label>Tahun *<select id="entryLinkYear" required></select></label>
+      <label>Perkara *<input id="entryLinkSubject" required placeholder="Contoh: Pengisian Skor Kendiri"></label>
+      <label class="full">Link/Pautan *<input id="entryLinkUrl" type="url" required placeholder="https://..."></label>
+      <div class="form-actions full">
+        <button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Simpan Link</button>
+        <button id="cancelEntryLinkEditor" class="btn secondary" type="button">Batal</button>
+      </div>
+    </form>
+  </article>
+</section>

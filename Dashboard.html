@@ -1,0 +1,15 @@
+<!-- Modul dashboard -->
+<section id="page-dashboard" class="page active">
+        <div class="page-head"><div><p class="eyebrow">Ringkasan prestasi</p><h1>Dashboard SK@S</h1></div><div class="actions"><button class="btn secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak</button><button class="btn secondary" onclick="exportDashboardCsv()"><i class="fa-solid fa-file-csv"></i> CSV</button></div></div>
+        <div class="kpis">
+          <article class="kpi"><i class="fa-solid fa-chart-pie blue"></i><span>Purata Keseluruhan</span><strong id="kpiAverage">—</strong><small id="kpiChange">Tiada data</small></article>
+          <article class="kpi"><i class="fa-solid fa-arrow-trend-up green"></i><span>Standard Tertinggi</span><strong id="kpiHighest">—</strong><small id="kpiHighestName">Tiada data</small></article>
+          <article class="kpi"><i class="fa-solid fa-arrow-trend-down red"></i><span>Standard Terendah</span><strong id="kpiLowest">—</strong><small id="kpiLowestName">Tiada data</small></article>
+          <article class="kpi focus"><i class="fa-solid fa-crosshairs yellow"></i><span>Fokus Penambahbaikan</span><strong id="kpiFocus">—</strong><small>Sediakan pelan tindakan bagi item lemah</small></article>
+          <article class="kpi"><i class="fa-solid fa-circle-check green"></i><span>Capai Sasaran</span><strong id="kpiReached">0</strong><small>standard</small></article>
+          <article class="kpi"><i class="fa-solid fa-circle-exclamation red"></i><span>Belum Capai</span><strong id="kpiNotReached">0</strong><small>standard</small></article>
+        </div>
+        <div class="chart-grid"><article class="card span-2"><h2>Perbandingan Skor Standard Mengikut Tahun</h2><div class="chart-box"><canvas id="barChart"></canvas></div></article><article class="card"><h2>Status Pencapaian Standard</h2><div class="chart-box"><canvas id="donutChart"></canvas></div></article><article class="card"><h2>Trend Purata Standard</h2><div class="chart-box"><canvas id="lineChart"></canvas></div></article><article class="card"><h2>Perbandingan Standard Tahun Dipilih</h2><div class="chart-box"><canvas id="radarChart"></canvas></div></article><article class="card"><h2>10 Item Memerlukan Penambahbaikan</h2><div class="chart-box"><canvas id="itemChart"></canvas></div></article></div>
+        <article class="card"><div class="card-head"><h2>Jadual Analisis Standard</h2><input id="tableSearch" class="compact" placeholder="Cari standard…"></div><div class="table-wrap"><table id="analysisTable"><thead></thead><tbody></tbody></table></div></article>
+        <article class="card"><h2>Analisis Ringkas</h2><ul id="summaryList" class="summary"></ul></article>
+      </section>

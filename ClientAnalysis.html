@@ -1,0 +1,61 @@
+<script>
+/** Perbandingan dan analisis tahunan dengan sesi eksplisit dan keadaan kosong. */
+async function runAnnual() {
+  if (!state.initial) return;
+  const empty = $('annualEmpty');
+  empty.classList.add('hidden');
+  try {
+    const request = {
+      startYear: $('anaStart').value,
+      endYear: $('anaEnd').value,
+      standard: $('anaStandard').value,
+      type: $('anaType').value,
+      _authToken: state.authToken
+    };
+    const data = await server('getAnnualAnalysis', request);
+    const records = data.allStandards || [];
+    if (!records.length) {
+      destroyChart('annual');
+      $('annualTable').querySelector('thead').innerHTML = '';
+      $('annualTable').querySelector('tbody').innerHTML = '';
+      $('annualSummary').innerHTML = '';
+      empty.textContent = 'Tiada data skor standard bagi tahun dan penapis yang dipilih.';
+      empty.classList.remove('hidden');
+      return;
+    }
+
+    const years = [...new Set(records.map(record => record.year))].sort((a, b) => a - b);
+    const codes = [...new Set(records.map(record => record.standard))];
+    chart('annual', 'annualChart', {
+      type: $('anaType').value === 'trend' ? 'line' : 'bar',
+      data: {
+        labels: codes,
+        datasets: years.map((year, index) => ({
+          label: String(year),
+          data: codes.map(code => records.find(record => record.year === year && record.standard === code)?.score ?? null),
+          borderColor: ['#60a5fa', '#22c55e', '#f59e0b'][index % 3],
+          backgroundColor: ['#2563eb', '#22c55e', '#f59e0b'][index % 3],
+          tension: .3
+        }))
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
+    });
+
+    $('annualTable').querySelector('thead').innerHTML = `<tr><th>Standard</th>${years.map(year => `<th>${year}</th>`).join('')}<th>Perubahan</th><th>Perubahan %</th><th>Ranking</th></tr>`;
+    $('annualTable').querySelector('tbody').innerHTML = codes.map(code => {
+      const values = years.map(year => records.find(record => record.year === year && record.standard === code)?.score);
+      const valid = values.filter(value => value != null);
+      const change = valid.length > 1 ? valid.at(-1) - valid.at(-2) : null;
+      const percentage = change != null && valid.at(-2) ? change / valid.at(-2) * 100 : null;
+      return `<tr><td>${esc(code)}</td>${values.map(value => `<td>${fmt(value)}</td>`).join('')}<td>${change == null ? '—' : change.toFixed(2)}</td><td>${percentage == null ? '—' : percentage.toFixed(2) + '%'}</td><td>—</td></tr>`;
+    }).join('');
+    $('annualSummary').innerHTML = (data.summaries || []).map(summary => `<p>${esc(summary)}</p>`).join('');
+  } catch (error) {
+    destroyChart('annual');
+    empty.textContent = /sesi log masuk|e-mel google/i.test(error.message)
+      ? 'Sesi pada peranti ini tidak lagi sah. Sila muat semula halaman dan log masuk semula.'
+      : 'Analisis tidak dapat dipaparkan. ' + (error.message || 'Sila cuba lagi.');
+    empty.classList.remove('hidden');
+  }
+}
+</script>

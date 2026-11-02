@@ -1,0 +1,135 @@
+<script>
+/** Fail Digital SK@S serta fungsi pentadbiran. */
+async function uploadDocument(event) {
+  event.preventDefault();
+  if ($('docId').value) {
+    await server('updateDocument', {
+      id: $('docId').value,
+      year: $('docYear').value,
+      category: $('docCategory').value,
+      documentName: $('docName').value
+    });
+    closeDocumentEditor();
+    return loadDocuments();
+  }
+  const file = $('docFile').files[0];
+  if (!file) return toast('Sila pilih fail.', true);
+  const maxBytes = state.initial.maxFileMb * 1024 * 1024;
+  if (file.size > maxBytes) return toast(`Fail melebihi ${state.initial.maxFileMb} MB.`, true);
+  const base64 = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  await server('uploadDocument', {
+    year: $('docYear').value,
+    category: $('docCategory').value,
+    documentName: $('docName').value,
+    fileName: file.name,
+    mimeType: file.type,
+    base64
+  });
+  closeDocumentEditor();
+  await loadDocuments();
+}
+
+async function loadDocuments() {
+  if (!state.initial) return;
+  state.documents = await server('getDocuments', {});
+  populateDocumentFilters();
+  renderDocuments();
+}
+
+/** Penapisan dibuat pada state untuk mengelakkan panggilan server tambahan. */
+function renderDocuments() {
+  const year = $('docFilterYear').value;
+  const category = $('docFilterCategory').value;
+  const rows = state.documents.filter(document =>
+    (!year || document.year === Number(year)) && (!category || document.category === category));
+  $('docRows').innerHTML = rows.length ? rows.map(document => {
+    const adminActions = state.initial.user.role === 'ADMIN'
+      ? `<button class="btn secondary" type="button" onclick="editDocument('${esc(document.id)}')">Edit</button> <button class="btn danger" type="button" onclick="removeDocument('${esc(document.id)}')">Padam</button> `
+      : '';
+    return `<tr><td>${document.year}</td><td>${esc(document.category)}</td><td>${esc(document.documentName)}</td><td class="table-actions">${adminActions}<a class="btn secondary" href="${esc(document.url)}" target="_blank" rel="noopener">Buka</a></td></tr>`;
+  }).join('') : '<tr><td colspan="4" class="empty-state">Tiada fail digital bagi penapis dipilih.</td></tr>';
+}
+
+function populateDocumentFilters() {
+  const selectedYear = $('docFilterYear').value;
+  const selectedCategory = $('docFilterCategory').value;
+  const years = [...new Set(state.documents.map(document => document.year))].sort((a, b) => b - a);
+  fillSelect('docFilterYear', years.map(year => ({ value: year, label: year })), 'Semua Tahun');
+  fillSelect('docFilterCategory', state.initial.categories.map(category => ({ value: category, label: category })), 'Semua Kategori');
+  $('docFilterYear').value = selectedYear;
+  $('docFilterCategory').value = selectedCategory;
+}
+
+async function removeDocument(id) {
+  if (confirm('Padam fail dan rekod ini?')) {
+    await server('deleteDocument', id);
+    await loadDocuments();
+  }
+}
+
+function openDocumentEditor() {
+  $('documentForm').reset();
+  $('docId').value = '';
+  $('docYear').value = $('globalYear').value;
+  $('documentEditorTitle').textContent = 'Muat Naik Dokumen';
+  $('saveDocumentButton').innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Muat Naik';
+  $('docFileField').classList.remove('hidden');
+  $('docFile').required = true;
+  $('documentEditor').classList.remove('hidden');
+  $('documentEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function editDocument(id) {
+  const document = state.documents.find(entry => entry.id === id);
+  if (!document || state.initial.user.role !== 'ADMIN') return;
+  $('documentForm').reset();
+  $('docId').value = document.id;
+  $('docYear').value = String(document.year);
+  $('docCategory').value = document.category;
+  $('docName').value = document.documentName;
+  $('documentEditorTitle').textContent = 'Edit Maklumat Dokumen';
+  $('saveDocumentButton').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan';
+  $('docFileField').classList.add('hidden');
+  $('docFile').required = false;
+  $('documentEditor').classList.remove('hidden');
+  $('documentEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeDocumentEditor() {
+  $('documentForm').reset();
+  $('docId').value = '';
+  $('docFile').required = false;
+  $('documentEditor').classList.add('hidden');
+}
+
+function resetDocumentFilters() {
+  $('docFilterYear').value = '';
+  $('docFilterCategory').value = '';
+  renderDocuments();
+}
+async function generateYear(e){
+  e.preventDefault();
+  const input=e.currentTarget.id==='quickYearForm'?'quickNewYear':'newYear';
+  const year=Number($(input).value);
+  if(state.initial.years.map(Number).includes(year))return toast(`Tahun ${year} telah wujud.`,true);
+  const result=await server('generateNewYear',year);
+  state.initial.years=result.years;
+  state.initial.items.push(...result.items);
+  state.items=state.initial.items;
+  const options=result.years.map(value=>({value,label:value}));
+  ['globalYear','stdYear','itemYear','actYear','docYear','entryLinkYear','anaStart','anaEnd'].forEach(id=>fillSelect(id,options));
+  $('globalYear').value=String(result.year);
+  syncYear(result.year);
+  $('anaStart').value=String(result.years[0]);
+  closeYearModal();
+  $('yearForm').reset();
+  await Promise.all([loadDashboard(),loadStandards()]);
+}
+async function saveSettings(e){e.preventDefault();await server('saveSettings',{settings:{NAMA_SEKOLAH:$('setSchool').value,LOGO_URL:$('setLogo').value,TARGET_MARKAH:$('setTarget').value},folderId:$('setFolder').value});location.reload()}
+async function saveUser(e){e.preventDefault();await server('saveUser',{email:$('setEmail').value,name:$('setName').value,role:$('setRole').value,status:$('setStatus').value});e.target.reset()}
+</script>

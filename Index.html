@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <base target="_top"><meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <div id="loading" class="loading"><div class="spinner"></div><p>Memproses data…</p></div>
+  <div id="toast" class="toast" role="status"></div>
+  <?!= include('Login'); ?>
+  <div id="app" class="app hidden">
+    <header class="header">
+      <button id="menuBtn" class="icon-btn menu-btn" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand"><div id="logoFallback" class="logo"><i class="fa-solid fa-school"></i></div><img id="schoolLogo" class="logo hidden" alt="Logo sekolah"><div><strong id="schoolName">SEKOLAH KEBANGSAAN LORMALONG</strong><span class="brand-meta"><span id="appTitle">DASHBOARD STANDARD KUALITI @ SEKOLAH</span><b id="appVersion" class="version-badge"></b></span></div></div>
+      <div class="header-actions"><div class="year-tools"><label class="year-quick">Tahun <select id="globalYear"></select></label><button id="quickAddYear" class="btn compact-btn admin-only" type="button"><i class="fa-solid fa-calendar-plus"></i><span>Tambah Tahun</span></button></div><div class="user"><span id="userName"></span><small id="userRole"></small></div></div>
+    </header>
+    <aside id="sidebar" class="sidebar"><nav>
+      <button class="nav active" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></button>
+      <button class="nav" data-page="standard"><i class="fa-solid fa-gauge-high"></i><span>Skor Standard</span></button>
+      <button class="nav" data-page="item"><i class="fa-solid fa-list-check"></i><span>Skor Item</span></button>
+      <button class="nav" data-page="analysis"><i class="fa-solid fa-chart-column"></i><span>Analisis Tahunan</span></button>
+      <button class="nav" data-page="action"><i class="fa-solid fa-bullseye"></i><span>Pelan Tindakan</span></button>
+      <button class="nav" data-page="documents"><i class="fa-solid fa-folder-open"></i><span>Fail Digital SK@S</span></button>
+      <button class="nav" data-page="entry-links"><i class="fa-solid fa-link"></i><span>Link Pengisian</span></button>
+      <button id="sidebarAddYear" class="nav nav-year admin-only" data-action="add-year"><i class="fa-solid fa-calendar-plus"></i><span>Tambah Tahun</span></button>
+      <button class="nav admin-only" data-page="settings"><i class="fa-solid fa-gear"></i><span>Tetapan</span></button>
+    </nav></aside><div id="scrim" class="scrim"></div>
+    <main class="main">
+      <?!= include('Dashboard'); ?>
+
+      <?!= include('Standard'); ?>
+
+      <?!= include('Item'); ?>
+
+      <?!= include('AnalisisTahunan'); ?>
+
+      <?!= include('PelanTindakan'); ?>
+
+      <?!= include('Dokumen'); ?>
+
+      <?!= include('LinkPengisian'); ?>
+
+      <?!= include('Tetapan'); ?>
+    </main>
+  </div>
+  <div id="yearModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="yearModalTitle">
+    <div class="modal-card">
+      <button id="closeYearModal" class="modal-close" type="button" aria-label="Tutup dialog"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-icon"><i class="fa-solid fa-calendar-plus"></i></div>
+      <p class="eyebrow">Pentadbir</p>
+      <h2 id="yearModalTitle">Tambah Tahun Baharu</h2>
+      <p class="modal-copy">Standard dan item daripada tahun terkini akan disalin. Semua ruangan skor untuk tahun baharu dibiarkan kosong.</p>
+      <form id="quickYearForm">
+        <label>Tahun baharu *<input id="quickNewYear" type="number" min="2000" max="2100" required></label>
+        <div class="form-actions"><button class="btn" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Jana Tahun</button><button id="cancelYearModal" class="btn secondary" type="button">Batal</button></div>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <?!= include('Scripts'); ?>
+  <?!= include('ClientDashboard'); ?>
+  <?!= include('ClientStandardItem'); ?>
+  <?!= include('ClientAnalysis'); ?>
+  <?!= include('ClientActionPlan'); ?>
+  <?!= include('ClientDocumentAdmin'); ?>
+  <?!= include('ClientEntryLinks'); ?>
+</body></html>
